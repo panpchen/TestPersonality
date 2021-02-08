@@ -15,10 +15,13 @@ export default class Game extends cc.Component {
   resultUI: ResultUI = null;
 
   onLoad() {
-    cc.director.on("click", this._onShow, this);
-  }
-
-  _onShow() {
-    this.resultUI.onShow();
+    cc.director.on(
+      "click",
+      (typeId: number) => {
+        this.resultUI.onShow(typeId);
+      },
+      this
+    );
+    this.resultUI.onHide();
   }
 }

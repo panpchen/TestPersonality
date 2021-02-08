@@ -11,18 +11,21 @@ const { ccclass, property } = cc._decorator;
 export default class ScaleButton extends cc.Component {
   private _time = 0;
   private readonly _duration = 0.1;
-  private _isScale = false;
+  private _transitionFinished = true;
   private _fromScale = cc.Vec2.ZERO;
   private toScale = cc.Vec2.ZERO;
+  private _isPress = false;
 
   registerNodeEvent() {
     this.node.on("touchstart", this._onTouchStart, this);
+    this.node.on("touchmove", this._onTouchMove, this);
     this.node.on("touchend", this._onTouchEnd, this);
     this.node.on("touchcancel", this._onTouchEnd, this);
   }
 
   unregisterNodeEvent() {
     this.node.off("touchstart", this._onTouchStart, this);
+    this.node.off("touchmove", this._onTouchMove, this);
     this.node.off("touchend", this._onTouchEnd, this);
     this.node.off("touchcancel", this._onTouchEnd, this);
   }
@@ -30,19 +33,36 @@ export default class ScaleButton extends cc.Component {
     this._fromScale = cc.v2(this.node.scaleX, this.node.scaleY);
     this.toScale = cc.v2(0.9, 0.9);
     this._time = 0;
-    this._isScale = true;
+    this._isPress = true;
+    this._transitionFinished = false;
+    event.stopPropagation();
+  }
+
+  _onTouchMove(event: cc.Event.EventTouch) {
+    let deltaX = event.getDelta().x;
+    if (
+      deltaX > this.node.parent.width / 100 ||
+      deltaX < -this.node.parent.width / 100
+    ) {
+      this._isPress = false;
+    }
   }
 
   _onTouchEnd(event: cc.Event.EventTouch) {
+    if (!this._isPress) {
+      return;
+    }
     this._fromScale = cc.v2(this.node.scaleX, this.node.scaleY);
     this.toScale = cc.v2(1, 1);
     this._time = 0;
-    this._isScale = true;
-    cc.director.emit("click");
+    this._isPress = false;
+    this._transitionFinished = false;
+    cc.director.emit("click", event.currentTarget.typeId);
+    event.stopPropagation();
   }
 
   update(dt) {
-    if (!this._isScale) {
+    if (this._transitionFinished) {
       return;
     }
 
@@ -59,7 +79,7 @@ export default class ScaleButton extends cc.Component {
     this.node.setScale(this._fromScale.lerp(this.toScale, ratio));
 
     if (ratio === 1) {
-      this._isScale = false;
+      this._transitionFinished = true;
       this._time = 0;
     }
   }

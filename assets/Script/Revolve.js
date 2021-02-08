@@ -50,7 +50,8 @@ cc.Class({
     for (let i = 0; i < this.cardsArray.length; i++) {
       const card = this.cardsArray[i];
       card.num = i;
-      let initAttr = JSON.parse(this.attrArray[i]);
+      card.typeId = i;
+      const initAttr = JSON.parse(this.attrArray[i]);
       card.zIndex = initAttr["zIndex"];
       card.scale = initAttr["scale"];
       card.opacity = initAttr["opacity"];
@@ -73,12 +74,12 @@ cc.Class({
       }
       if (buttonScale.node.zIndex === 3) {
         buttonScale.registerNodeEvent();
-        const nextAttr = JSON.parse(this.attrArray[buttonScale.node.num]);
-        buttonScale.node.scale = nextAttr["scale"];
       } else {
         buttonScale.unregisterNodeEvent();
       }
     }
+
+    event.stopPropagation();
   },
 
   onTouchMove(event) {
@@ -95,6 +96,8 @@ cc.Class({
       // 说明是向左滑动
       this.revolve2Left();
     }
+
+    event.stopPropagation();
   },
 
   revolve2Right() {
