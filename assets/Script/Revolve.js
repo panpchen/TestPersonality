@@ -5,8 +5,6 @@ cc.Class({
     revolveTime: 0.8, // 旋转所需时间
   },
 
-  // LIFE-CYCLE CALLBACKS:
-
   onLoad() {
     this.attrArray = [
       JSON.stringify({
@@ -50,16 +48,37 @@ cc.Class({
     // 将cardsNode子节点的各个属性初始化
     this.cardsArray = this.node.children;
     for (let i = 0; i < this.cardsArray.length; i++) {
-      this.cardsArray[i].num = i;
+      const card = this.cardsArray[i];
+      card.num = i;
       let initAttr = JSON.parse(this.attrArray[i]);
-      this.cardsArray[i].zIndex = initAttr["zIndex"];
-      this.cardsArray[i].scale = initAttr["scale"];
-      this.cardsArray[i].opacity = initAttr["opacity"];
-      // this.cardsArray[i].pos = initAttr['pos'];
+      card.zIndex = initAttr["zIndex"];
+      card.scale = initAttr["scale"];
+      card.opacity = initAttr["opacity"];
+      // card.pos = initAttr['pos'];
+      if (card.zIndex === 3) {
+        card.addComponent("ScaleButton").registerNodeEvent();
+      }
     }
-
     // 触摸监听
     this.node.on("touchmove", this.onTouchMove, this);
+    this.node.on("touchend", this._onTouchEnd, this);
+    this.node.on("touchcancel", this._onTouchEnd, this);
+  },
+
+  _onTouchEnd(event) {
+    for (let i = 0; i < this.cardsArray.length; i++) {
+      const buttonScale = this.cardsArray[i].getComponent("ScaleButton");
+      if (!buttonScale) {
+        buttonScale = this.cardsArray[i].addComponent("ScaleButton");
+      }
+      if (buttonScale.node.zIndex === 3) {
+        buttonScale.registerNodeEvent();
+        const nextAttr = JSON.parse(this.attrArray[buttonScale.node.num]);
+        buttonScale.node.scale = nextAttr["scale"];
+      } else {
+        buttonScale.unregisterNodeEvent();
+      }
+    }
   },
 
   onTouchMove(event) {
