@@ -32,9 +32,17 @@ export default class Game extends cc.Component {
       this
     );
 
+    this.videoPlayer.node.on(
+      "ready-to-play",
+      () => {
+        this.videoPlayer.play();
+      },
+      this
+    );
+
     this.resultUI.onHide();
     this.videoPlayer.node.active = true;
-    this.videoPlayer.play();
+    // this.videoPlayer.play();
     this.cardsNode.active = false;
 
     this.intro.node.active = true;
@@ -50,6 +58,7 @@ export default class Game extends cc.Component {
 
   _showCards() {
     this.videoPlayer.node.active = false;
+    this.videoPlayer.stop();
     this.intro.node.active = false;
     this.cardsNode.active = true;
   }

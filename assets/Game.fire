@@ -2837,7 +2837,7 @@
     "_clip": {
       "__uuid__": "6eeeacc7-aa30-45a5-8fd2-2f5e0f7b6bb7"
     },
-    "_volume": 1,
+    "_volume": 0.5,
     "_mute": false,
     "_isFullscreen": false,
     "_N$isFullscreen": false,
