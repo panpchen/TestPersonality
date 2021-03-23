@@ -11,7 +11,7 @@ export const PERSON_DATAS = [
   },
   {
     color: "#0A7E8B",
-    txt: `C岛--常规型(Conventional)
+    txt: `C岛--事务型(Conventional)
 
   总体特征：追求秩序感,自我抑制,顺从,防卫心理强,追求实际,回避创造性活动。
   
@@ -21,7 +21,7 @@ export const PERSON_DATAS = [
   },
   {
     color: "#0A284D",
-    txt: `E岛--企业型(Enterprising)
+    txt: `E岛--管理型(Enterprising)
 
   总体特征：为人乐观,喜欢冒险，行事冲动，对自己充满自信，精力旺盛，喜好发表意见和见解。
   
@@ -41,7 +41,7 @@ export const PERSON_DATAS = [
   },
   {
     color: "#1A3619",
-    txt: `R岛--实用型(Realistic
+    txt: `R岛--现实型(Realistic)
 
     总体特征：个性平和稳重，看重物质，追求实际效果，喜欢实际动手进行操作实践。
     
